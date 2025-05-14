@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    container_name: eficiencia-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
+      - SPRING_DATASOURCE_USERNAME=rm556502
+      - SPRING_DATASOURCE_PASSWORD=281192
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=oracle.jdbc.OracleDriver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_FLYWAY_BASELINEONMIGRATE=true
+    networks:
+      - eficiencia-net
+
+  db:
+    image: postgres:15
+    container_name: eficiencia-db
+    environment:
+      POSTGRES_DB: eficiencia
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    networks:
+      - eficiencia-net
+
+networks:
+  eficiencia-net:
+    driver: bridge
